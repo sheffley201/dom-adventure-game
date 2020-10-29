@@ -9,7 +9,9 @@ let button2 = document.querySelector('.button2')
 let button3 = document.querySelector('.button3')
 let button4 = document.querySelector('.button4')
 let buttons = document.querySelectorAll('button')
-
+let letterForTimer = 0;
+let stringlength;
+let timer;
 //create player Object
 const player = {
   health: 100
@@ -17,7 +19,8 @@ const player = {
 
 function gameStart() {
   //set the starter game Text
-  gameText.textContent = "You are a monster hunter getting chased in a forest by a band of monsters. You can meet up with your partner, or take the monsters on solo.";
+  scrollingText("You are a monster hunter getting chased in a forest by a band of monsters. You can meet up with your partner, or take the monsters on solo.")
+//  gameText.textContent = "You are a monster hunter getting chased in a forest by a band of monsters. You can meet up with your partner, or take the monsters on solo.";
 
   // add text to buttons and eventListeners to each buttons
   button1.textContent = 'Meet up with partner'
@@ -37,7 +40,8 @@ function confidentType() {
   button2.removeEventListener('click', confidentType)
 
   //change the game text
-  gameText.textContent = "You're so confident you stop in your tracks and prepare to fight. How do you draw your weapons"
+  gameText.textContent = ''
+  scrollingText("You're so confident you stop in your tracks and prepare to fight. How do you draw your weapons")
 
   //button 1 leads to death
   button1.textContent = 'Just your dagger'
@@ -64,7 +68,9 @@ function survivedMonsters() {
   button3.removeEventListener('click', event)
 
   //change main text element
-  gameText.textContent = 'You survived the monsters but you are severely hurt, you meet up with your partner and decide what to d next'
+  //change the game text
+  gameText.textContent = ''
+  scrollingText('You survived the monsters but you are severely hurt, you meet up with your partner and decide what to do next')
 
   //change button text
   button1.textContent = 'Hide in a nearby building'
@@ -85,7 +91,9 @@ function meetPartner() {
   button2.removeEventListener('click', confidentType)
 
   //set game text
-  gameText.textContent = 'You meet your partner in a clearing. you can choose to set traps, or keep running.'
+  gameText.textContent = ''
+  scrollingText('You meet your partner in a clearing. you can choose to set traps, or keep running.')
+
 
   //add new text and event listener
   button1.textContent = 'Set traps'
@@ -102,9 +110,11 @@ function keepRunning() {
 
   //change main text element
   if (!player.traps) {
-    gameText.textContent = 'You kept running until you came across a building, it looks old and abandoned.'
+    gameText.textContent = ''
+    scrollingText('You kept running until you came across a building, it looks old and abandoned.')
   } else {
-    gameText.textContent = 'As you keep running you hear and explosion behind you, you come across a old building that looks abandoned'
+    gameText.textContent = ''
+    scrollingText('As you keep running you hear and explosion behind you, you come across a old building that looks abandoned')
     player.timesRan = 1
   }
 
@@ -122,8 +132,12 @@ function setTraps() {
   button1.removeEventListener('click', setTraps)
   button2.removeEventListener('click', keepRunning)
 
+
+  gameText.textContent = ''
+  scrollingText('you set traps behind you. will you wait for survivors or continue running')
+
   //change main text element
-  gameText.textContent = 'you set traps behind you. will you wait for survivors or continue running'
+  gameText.textContent =
 
   //change button text
   button1.textContent = 'Wait for Survivors'
@@ -135,21 +149,23 @@ function insideBuilding() {
   //remove past listeners
   button1.removeEventListener('click', insideBuilding)
 
+  gameText.textContent = ''
+  scrollingText('Your inside the building and push furniture agianst he door to keep them out. you and your partner decide to sweep the building ot make sure no one is inside.')
+
   //change main text element
-  gameText.textContent = 'Your inside the building and push furniture agianst he door to keep them out. you and your partner decide to sweep the building ot make sure no one is inside.'
+  gameText.textContent =
 
   //change button text
   button1.textContent = 'take the upstairs'
   button2.textContent = 'take the downstairs'
   button3.textContent = ''
   button4.textContent = ''
-
 }
 
 
 function gameOver(text) {
   //change main text element
-  gameText.textContent = text + '. To start over refresh the page'
+  scrollingText(text + '. To start over refresh the page')
 
   //set each buttons display to none
   for (let button of buttons) {
@@ -181,5 +197,24 @@ function placeholder() {
   button4.style.display = 'block'
 }
 
+//given arg like 'string'
+function scrollingText(string) {
+  if (typeof timer !== 'undefined') {
+    clearInterval(timer)
+  }
+  letterForTimer = 0
+  stringlength = string.length
+  //set timer to add letter
+  timer = setInterval(() => {
+    let currentLetter = string[letterForTimer]
+    gameText.textContent += currentLetter
+    //moves to next letter in string
+    letterForTimer++
+    // if we arrive at last letter
+    if (string[letterForTimer] === undefined) {
+      clearInterval(timer)
+    }
+  }, 30)
+}
 
 gameStart();
