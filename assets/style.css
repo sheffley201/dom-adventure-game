@@ -15,9 +15,35 @@ body {
   justify-content: center;
   line-height: 140%;
   min-height: 100vh;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 main {
   font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+button {
+  width: 100%;
+  padding: 10px 0px;
+  font-size: 20px;
+  border-radius: 5px;
+  border: 2px solid black;
+  margin: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: lightgray;
+}
+
+p {
+  font-size: 1rem;
+}
+
+.choice-button {
+  display: none;
+}
