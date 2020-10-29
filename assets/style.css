@@ -27,7 +27,6 @@ button {
   height: 35px;
   min-width: 100px;
   width: auto;
-  word-wrap: normal;
 }
 
 .button-container {

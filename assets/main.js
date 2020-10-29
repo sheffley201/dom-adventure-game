@@ -8,72 +8,156 @@ let button1 = document.querySelector('.button1')
 let button2 = document.querySelector('.button2')
 let button3 = document.querySelector('.button3')
 let button4 = document.querySelector('.button4')
+let buttons = document.querySelectorAll('button')
 
-//create Objects
+//create player Object
 const player = {
   health: 100
 }
 
 function gameStart() {
+  //set the starter game Text
+  gameText.textContent = "You are a monster hunter getting chased in a forest by a band of monsters. You can meet up with your partner, or take the monsters on solo.";
 
-  //set the general Text
-  gameText.textContent = "You are a monster hunter getting chased in a forest by a band of monsters. Do you want to meet up with your partner, or take them solo.";
-
-  // add text to buttons and event listeners to buttons
+  // add text to buttons and eventListeners to each buttons
   button1.textContent = 'Meet up with partner'
   button1.addEventListener('click', meetPartner)
 
   button2.textContent = "You're the confident type"
   button2.addEventListener('click', confidentType)
 
+  //hide button 3 and 4 because there not being used
   button3.style.display = 'none'
   button4.style.display = 'none'
 }
 
 function confidentType() {
+  //remove the listeners from previous buttons.
   button1.removeEventListener('click', meetPartner)
   button2.removeEventListener('click', confidentType)
+
+  //change the game text
   gameText.textContent = "You're so confident you stop in your tracks and prepare to fight. How do you draw your weapons"
 
+  //button 1 leads to death
   button1.textContent = 'Just your dagger'
   button1.addEventListener('click', event => {
-    gameOver('you try to fight them but a small dagger was not enough to defend yourself, and you die a valiant death.')
+    gameOver('You try to fight them, but a small dagger was not enough to defend yourself and you die a valiant death')
   })
 
+  // this is the only surviving option
   button2.textContent = 'Just your Sword'
+  button2.addEventListener('click', survivedMonsters)
 
+  //button 3 also leads to death
   button3.textContent = 'Why not both?'
   button3.style.display = 'block'
   button3.addEventListener('click', event => {
-    gameOver('You couldnt take both weapons out in time so you ded')
+    gameOver('You dont know how to wield both efficiently, you got overconfiant and died.')
   })
 }
 
+function survivedMonsters() {
+  //remove past listeners
+  button1.removeEventListener('click', gameOver)
+  button2.removeEventListener('click', survivedMonsters)
+  button3.removeEventListener('click', event)
+
+  //change main text element
+  gameText.textContent = 'You survived the monsters but you are severely hurt, you meet up with your partner and decide what to d next'
+
+  //change button text
+  button1.textContent = 'Hide in a nearby building'
+  button2.textContent = 'Set traps for other pursuers'
+  button3.textContent = ''
+  button4.textContent = ''
+
+  //show/hide buttons
+  button1.style.display = 'block'
+  button2.style.display = 'block'
+  button3.style.display = 'none'
+  button4.style.display = 'none'
+}
+
 function meetPartner() {
+  //remove previous listeners
   button1.removeEventListener('click', meetPartner)
   button2.removeEventListener('click', confidentType)
 
-  gameText.textContent = 'You meet your partner in a clearing, while you arrive arrows fly past you torwards your pursuers. You turn to 2 dead vampires, but another 2 are rapidly approaching'
+  //set game text
+  gameText.textContent = 'You meet your partner in a clearing. you can choose to set traps, or keep running.'
 
-  button1.textContent = 'Draw your dagger'
-  button1.addEventListener('click', partnerWithDagger)
+  //add new text and event listener
+  button1.textContent = 'Set traps'
+  button1.addEventListener('click', setTraps)
 
-  button2.textContent = 'Draw your Sword'
-
-  button3.textContent = 'Draw both weapons'
-  button3.style.display = 'block'
+  button2.textContent = 'Keep running'
+  button2.addEventListener('click', keepRunning)
 }
 
-function partnerWithDagger() {
-  //take damage and display message
-  player.health -= 25
-  gameText.textContent = 'You take out the remaining enemies with your partner and take minor damage. Your current health is ' + player.health + 'hp'
+function keepRunning() {
+  //remove past listeners
+  button1.removeEventListener('click', setTraps)
+  button2.removeEventListener('click', keepRunning)
 
-  button1.textContent = 'placeholder'
-  button2.textContent = 'placeholder'
-  button3.textContent = 'placeholder'
+  //change main text element
+  if (!player.traps) {
+    gameText.textContent = 'You kept running until you came across a building, it looks old and abandoned.'
+  } else {
+    gameText.textContent = 'As you keep running you hear and explosion behind you, you come across a old building that looks abandoned'
+    player.timesRan = 1
+  }
+
+  //change button text
+  button1.textContent = 'Hide in the building'
+  button1.addEventListener('click', insideBuilding)
+  button2.textContent = 'Too obvious, you keep running'
+
 }
 
+function setTraps() {
+  //somehow remember that we set Traps
+  player.traps = true
+  //remove past listeners
+  button1.removeEventListener('click', setTraps)
+  button2.removeEventListener('click', keepRunning)
+
+  //change main text element
+  gameText.textContent = 'you set traps behind you. will you wait for survivors or continue running'
+
+  //change button text
+  button1.textContent = 'Wait for Survivors'
+  button2.textContent = 'get a lead while you can'
+  button2.addEventListener('click', keepRunning)
+}
+
+function insideBuilding() {
+  //remove past listeners
+  button1.removeEventListener('click', insideBuilding)
+
+  //change main text element
+  gameText.textContent = 'Your inside the building and push furniture agianst he door to keep them out. you and your partner decide to sweep the building ot make sure no one is inside.'
+
+  //change button text
+  button1.textContent = 'take the upstairs'
+  button2.textContent = 'take the downstairs'
+  button3.textContent = ''
+  button4.textContent = ''
+
+}
+
+
+function gameOver(text) {
+  //change main text element
+  gameText.textContent = text + '. To start over refresh the page'
+
+  //set each buttons display to none
+  for (let button of buttons) {
+    button.style.display = 'none'
+  }
+}
+
+//i decided to make a template for a scene bc each one  is similar
 function placeholder() {
   //remove past listeners
   button1.removeEventListener()
@@ -87,8 +171,8 @@ function placeholder() {
   //change button text
   button1.textContent = 'block'
   button2.textContent = 'block'
-  button3.textContent = 'block'
-  button4.textContent = 'block'
+  button3.textContent = ''
+  button4.textContent = ''
 
   //show/hide buttons
   button1.style.display = 'block'
@@ -98,26 +182,4 @@ function placeholder() {
 }
 
 
-function gameOver(text) {
-  /*remove past listeners
-  button1.removeEventListener()
-  button2.removeEventListener()
-  button3.removeEventListener()
-  button4.removeEventListner()
- */
-  //change main text element
-  gameText.textContent = text + ', To start over refresh the page.'
-  clearListener(button1)
-  //show/hide buttons
-  button1.style.display = 'none'
-  button2.style.display = 'none'
-  button3.style.display = 'none'
-  button4.style.display = 'none'
-}
-function clearListener(node) {
-  let clone = node.cloneNode(true)
-  console.log(clone)
-  console.log(node)
-
-}
 gameStart();
