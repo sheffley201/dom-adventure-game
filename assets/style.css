@@ -13,11 +13,24 @@ body {
   display: flex;
   font-family: Helvetica, Arial, sans-serif;
   justify-content: center;
-  line-height: 140%;
+  line-height: 230%;
   min-height: 100vh;
 }
 
 main {
   font-size: 2rem;
+  min-width: 650px;
+  max-width: 900px;
 }
 
+button {
+  height: 35px;
+  min-width: 100px;
+  width: auto;
+  word-wrap: normal;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+}
