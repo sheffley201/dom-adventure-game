@@ -151,7 +151,7 @@ const ghostRoom = function() {
   //variable for ghost is false
   let ghost =false;
   //change the mainPara text
-  mainPara.textContent = "You walk down the right hallway to find yourself in another room. You see a 2 doors, one appears to be a closet door. The room is quite cold for some reason. What do you do?"
+  mainPara.textContent = "You walk down the right hallway to find yourself in another room. You see 2 doors, one appears to be a closet door. There is also a table in the center of the room. The room is quite cold for some reason. What do you do?"
   //add 3 buttons
   const section = document.querySelector('#buttonArea');
   const button1 = document.createElement("button");
