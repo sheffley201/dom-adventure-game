@@ -4,20 +4,35 @@
 
 html {
   font-size: 1.2em;
+  background-color: #404040;
+}
+h1 {
+  text-align: center;
 }
 
-body {
-  align-items: center;
-  background: #343434;
-  color: #fefefe;
+div {
+  display: block;
+  height: 180px;
+  max-width: 500px;
+  background: #d4d4d4;
+  color: black;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+button {
+  width: 80px;
+  height: 40px;
+  text-transform: uppercase;
+  border-radius: 10%;
+}
+#buttonArea {
   display: flex;
-  font-family: Helvetica, Arial, sans-serif;
-  justify-content: center;
-  line-height: 140%;
-  min-height: 100vh;
+  justify-content: space-between;
+  max-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }
-
-main {
-  font-size: 2rem;
-}
-
