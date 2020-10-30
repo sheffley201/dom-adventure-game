@@ -16,7 +16,7 @@ const startGame = function() {
   //create a variable for a div
   const content = document.createElement("div");
   //add text to main paragraph
-  mainPara.textContent = "You awake in a dimly lit room. There are doors to your left and right. Which door do you pick?";
+  mainPara.textContent = "You awake in a dimly lit room. There are doors to your left and right. Which do you want to do?";
   //append content into the main
   main.appendChild(content);
   //append the paragraph into the div(content)

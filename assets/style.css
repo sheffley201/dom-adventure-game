@@ -21,6 +21,7 @@ div {
   margin-right: auto;
   margin-top: 30px;
   margin-bottom: 50px;
+  border: 10px inset #a96d00;
 }
 
 button {
@@ -28,6 +29,17 @@ button {
   height: 40px;
   text-transform: uppercase;
   border-radius: 10%;
+  border: 2px solid #a96d00;
+}
+
+button:hover {
+  background-color: #7b7b7b;
+  cursor: pointer;
+}
+
+button:visited {
+  border: none;
+  padding: 0;
 }
 #buttonArea {
   display: flex;
