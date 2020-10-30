@@ -68,39 +68,86 @@ const pitTrap = function() {
 const hallway = function () {
   //change text of mainPara
   mainPara.textContent = 'You jump from the ramp and land roughly. You stand up and find yourself in a hallway with two directions. Which way do you go? (Use "d" for right and "a" for left.)'
-  window.addEventListener("keydown", event => {
+  //function for key presses
+  const keys = function(event) {
     if (event.key == "a") {
+      window.removeEventListener("keydown", keys);
       return death("As you walk down the left hallway a slab of stone falls from the ceiling and crushes you.");
     } else if (event.key == "d") {
+      window.removeEventListener("keydown", keys);
       return ghostRoom();
     }
-  })
+  }
+  //add event listenerfor keydown
+  window.addEventListener("keydown", keys);
+
 };
 
 //adding a ghost room because reasons
 const ghostRoom = function() {
   //variable for key is false
+  let key = false;
   //variable for cloth is false
+  let cloth = false;
   //variable for ghost is false
+  let ghost =false;
   //change the mainPara text
+  mainPara.textContent = "You walk down the right hallway to find yourself in another room. You see a 2 doors, one appears to be a closet door. The room is quite cold for some reason. What do you do?"
   //add 3 buttons
+  const section = document.querySelector('#buttonArea');
+  const button1 = document.createElement("button");
+  const button2 = document.createElement("button");
+  const button3 = document.createElement('button');
+  //appendchild buttons
+  section.appendChild(button1);
+  section.appendChild(button2);
+  section.appendChild(button3);
   //name buttons
-  //remove event listener for keydown
+  button1.textContent = "door";
+  button2.textContent = "table";
+  button3.textContent = "closet";
   //add event listeners for buttons
   //button1 check door
+  button1.addEventListener('click', door => {
     // if no key, it's locked
+    if (key == false) {
+      mainPara.textContent = "You try to open the door but it appears to be locked. Maybe you need a key. What do you do?";
     //if key , opens to new Room
+    } else if (key == true) {
+      return someRoom();
+    }
+  });
   //button 2 check table
+  button2.addEventListener('click', table => {
     //if cloth false remove cloth to find hand
+    if (cloth == false) {
+      mainPara.textContent = "You approach the table and lift the tablecloth. What appears to be a severed hand is laying underneath the cloth. Disgusted you walk away. What do you do now?"
       //cloth equals true
+      cloth = true;
       //change button to check hand
-    //if cloth equals true, look at hand decide not to take it
+      button2.textContent = "hand";
+      //if cloth equals true, look at hand decide not to take it
+    } else if(cloth == true) {
+      mainPara.textContent = "The hand is still where you left it. It's very gross. You decide to back away. What do you do now?"
+    }
+  });
   //button3 check closet
+  button3.addEventListener('click', closet => {
     //if ghost false, open doors and find ghost head
+    if (ghost == false) {
+      mainPara.textContent = "You open the closet door. A ghostly head is floating in front of you. Seeing you the head screams. You slam the door closed and jump away. What do you do now?";
       //set ghost to true
+      ghost = true;
     //if ghost true, pick up key on ground
+  } else if (ghost ==true) {
+      mainPara.textContent = "Mustering your courage you open the closet door again. The ghost appears to be gone. You see a key lying on the ground and decide to pick it up. Now what do you do?";
       //set key to true
+      key = true;
+    }
+  });
 }
+
+//make another scenario
 
 
 
