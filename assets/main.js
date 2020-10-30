@@ -5,7 +5,10 @@
 //Create function that starts the game
 //create a paragraph
 const mainPara = document.createElement("p");
-//add text content to the paragraph
+//check for if they went through bear Room
+let bearCheck = false;
+//create variable for how long waiting
+let wait = 0;
 
 const startGame = function() {
   //set variable for main
@@ -23,21 +26,75 @@ const startGame = function() {
   //create button elements
   const button1 = document.createElement("button");
   const button2 = document.createElement("button");
+  const button3 = document.createElement('button');
   //add text to buttons
   button1.textContent = "Left";
-  button2.textContent = "right";
+  button2.textContent = "wait";
+  button3.textContent = "right";
   //set event listeners for each button to go for each door
   //add function for which button is pressed
   button1.addEventListener("click", left = () => {
     return bearRoom();
-
   });
-  button2.addEventListener("click", right = () => {
+  button2.addEventListener("click", waitHere = () => {
+    //display first message when waiting
+    if (wait === 0) {
+      mainPara.textContent = "You decide to wait for some time. Nothing happens. What do you want to do?"
+    } else if (wait > 0 && wait < 15) {
+      mainPara.textContent = "You continue to wait. For what reason, you don't know. What do you want to do?"
+    } else if (wait === 15) {
+     return waitingRoom();
+    }
+    wait++;
+  });
+  button3.addEventListener("click", right = () => {
     return pitTrap();
   });
   //append buttons to btnArea
   btnArea.appendChild(button1);
   btnArea.appendChild(button2);
+  btnArea.appendChild(button3);
+}
+
+//create waitingRoom
+const waitingRoom = function () {
+  //change text of mainPara
+  mainPara.textContent = `The waiting seems to have paid off as the floor opens up underneath and you fall onto a mat in a new room. There is a man standing in the otherwise empty room. "Since you don't feel like playing neither do I, do as you wish." The man walks out the door. What do you do now?`
+  //reset wait to zero
+  wait = 0;
+  //removeEventListener
+  const section = document.querySelector('#buttonArea');
+  const button1 = document.querySelector('button');
+  const button2 = document.getElementsByTagName('button')[1];
+  const button3 = document.querySelector('button:last-child');
+  button1.removeEventListener('click', left);
+  button2.removeEventListener('click', waitHere);
+  button3.removeEventListener('click', right);
+  //delete button3
+  section.removeChild(button3);
+  //change button text
+  button1.textContent = "wait";
+  button2.textContent = "door";
+  //wait option until you die
+  button1.addEventListener('click', waitHere = ()=> {
+    if (wait === 0) {
+      mainPara.textContent = "It worked before so why not try it again. You wait for some time and nothing happens. What do you want to do?"
+    } else if (wait > 0 && wait <10) {
+      mainPara.textContent = "You continue to wait in the room. Nothing happens. What do you want to do?";
+    } else if (wait === 10) {
+      return death ("You continue to wait and wait until you pass out from starvation.");
+    }
+    //increase wait
+    wait++;
+  });
+  //leave out door option
+  button2.addEventListener('click', door = ()=> {
+    mainPara.textContent = "You open the door and find it leads to the outside. You wonder what that was all about and leave."
+    //delete buttons
+    section.removeChild(button1);
+    section.removeChild(button2);
+    section.removeChild(button3);
+  })
 }
 
 //pitrap function here
@@ -48,12 +105,14 @@ const pitTrap = function() {
   const section = document.querySelector('#buttonArea');
   const button1 = document.querySelector('button');
   const button2 = document.getElementsByTagName('button')[1];
+  const button3 = document.querySelector('button:last-child');
   section.removeChild(button1);
   section.removeChild(button2);
-  //set a timer to return death after 9seconds
+  section.removeChild(button3);
+  //set a timer to return death after 6seconds
   let trapFall = setTimeout(() => {
   return death("You fail to jump over the gap and fall into a pit.")
-  }, 9000);
+}, 6000);
   //if the user presses spacebar within 10seconds move to new Room
   //stop timer if spacebar is pressed
   window.addEventListener("keyup", event => {
@@ -108,17 +167,17 @@ const ghostRoom = function() {
   button3.textContent = "closet";
   //add event listeners for buttons
   //button1 check door
-  button1.addEventListener('click', door => {
+  button1.addEventListener('click', door = ()=> {
     // if no key, it's locked
     if (key == false) {
       mainPara.textContent = "You try to open the door but it appears to be locked. Maybe you need a key. What do you do?";
     //if key , opens to new Room
     } else if (key == true) {
-      return someRoom();
+      return goldRoom();
     }
   });
   //button 2 check table
-  button2.addEventListener('click', table => {
+  button2.addEventListener('click', table = ()=> {
     //if cloth false remove cloth to find hand
     if (cloth == false) {
       mainPara.textContent = "You approach the table and lift the tablecloth. What appears to be a severed hand is laying underneath the cloth. Disgusted you walk away. What do you do now?"
@@ -132,7 +191,7 @@ const ghostRoom = function() {
     }
   });
   //button3 check closet
-  button3.addEventListener('click', closet => {
+  button3.addEventListener('click', closet = ()=> {
     //if ghost false, open doors and find ghost head
     if (ghost == false) {
       mainPara.textContent = "You open the closet door. A ghostly head is floating in front of you. Seeing you the head screams. You slam the door closed and jump away. What do you do now?";
@@ -146,9 +205,6 @@ const ghostRoom = function() {
     }
   });
 }
-
-//make another scenario
-
 
 
 //add death function
@@ -166,59 +222,50 @@ const death = function(string) {
 };
 
 const bearRoom = function() {
+  //add variable for if bear moved
+  bearMoved = false;
+  //chang bearCheck to true
+  bearCheck = true;
   //change text of main paragraph
   mainPara.textContent = "There is a bear in here. It's sitting in front of another door eating from a pot of honey. How are you going to move the bear?";
   //store section in a variable
   const buttonSection = document.querySelector("#buttonArea");
   //store all buttons in variables
   const button1 = document.querySelector("button");
-  const button2 = document.querySelector("button:last-child");
+  const button2 = document.getElementsByTagName('button')[1];
+  const button3 = document.querySelector("button:last-child");
+
   //removing event listeners
   button1.removeEventListener('click', left);
-  button2.removeEventListener('click', right);
-  //create new button
-  const button3 = document.createElement("button");
-  //append third button
-  buttonSection.appendChild(button3);
+  button2.removeEventListener('click', waitHere);
+  button3.removeEventListener('click', right);
   //change text on buttons
   button1.textContent = "taunt bear";
   button2.textContent = "try door";
   button3.textContent = "take honey";
   //event listeners for each button
   button1.addEventListener('click', taunt = ()=> {
-    return bearTaunt();
+    if (bearMoved == false) {
+      mainPara.textContent = "The bear looks mad but moves away from the door. What do you want to do?"
+      //change bearMoved to true
+      bearMoved = true;
+    } else if (bearMoved == true) {
+      return death("The bear has had enough. he charges you and bites your head off.")
+    }
   });
   button2.addEventListener('click', door = ()=>{
-    return death("The bear swats at you as you walk past.")
+    if (bearMoved == false) {
+      return death("The bear swats at you as you walk past.")
+    } else if (bearMoved == true) {
+      return goldRoom();
+    }
   });
   button3.addEventListener('click', honey = ()=> {
     return death("That was really stupid. The bear bites your head off.")
   });
 }
 
-
-const bearTaunt = function () {
-  mainPara.textContent = "The bear seems a bit mad but moves to the side of the room. What would you like to do now?"
-  //store buttons in variables and remove event listeners
-  const button1 = document.querySelector('button');
-  const button2 = document.getElementsByTagName('button')[1];
-  const button3 = document.querySelector('button:last-child');
-  button1.removeEventListener('click', taunt);
-  button2.removeEventListener('click', door);
-  button3.removeEventListener('click', honey);
-  //add functions for when each one is pressed
-  button1.addEventListener('click', taunt = ()=> {
-    return death("The bear has had enough of you. He charges you and bites your head off.");
-  });
-  button2.addEventListener('click', door = ()=>{
-    return goldRoom();
-  });
-  button3.addEventListener('click', honey = ()=> {
-    return death("That was really stupid. The bear bites your head off.")
-  });
-}
-
-
+//add goldRoom function
 const goldRoom = function() {
   //set variable for amount of gold
   let gold = 0;
@@ -227,9 +274,16 @@ const goldRoom = function() {
   const button1 = document.querySelector('button');
   const button2 = document.getElementsByTagName('button')[1];
   const button3 = document.querySelector('button:last-child');
-  button1.removeEventListener('click', taunt);
-  button2.removeEventListener('click', door);
-  button3.removeEventListener('click', honey);
+  //remove event listeners
+  if (bearCheck == true) {
+    button1.removeEventListener('click', taunt);
+    button2.removeEventListener('click', door);
+    button3.removeEventListener('click', honey);
+  } else if (bearCheck == false) {
+    button1.removeEventListener('click', door);
+    button2.removeEventListener('click', table);
+    button3.removeEventListener('click', closet);
+  };
   //change button textContent
   button1.textContent = "take some gold";
   button2.textContent = "take all gold";
