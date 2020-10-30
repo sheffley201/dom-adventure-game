@@ -4,7 +4,7 @@
 
 //this function handles the player dying and gives the option to try again
 const death = function(cause) {
-  //remove any event listeners
+  //remove any event listeners or timeouts so you don't die a second time
   choiceButtonOne.removeEventListener('click', pitfall);
   choiceButtonTwo.removeEventListener('click', bearRoom);
   choiceButtonOne.removeEventListener('click', bearMoved);
@@ -14,18 +14,23 @@ const death = function(cause) {
   choiceButtonOne.removeEventListener('click', lockedDoor);
   choiceButtonTwo.removeEventListener('click', bearBite);
   choiceButtonThree.removeEventListener('click', tunnelOne);
+  choiceButtonOne.removeEventListener('click', alcove);
+  choiceButtonTwo.removeEventListener('click', tunnelTwo);
+  choiceButtonOne.removeEventListener('click', jumpOver);
+  choiceButtonTwo.removeEventListener('click', tunnelThree);
+  clearTimeout(boulderTimer);
   //choiceButtonThree.removeEventListener('click', dead);
   //change the 'room description' to the cause of death provided by the call
   roomDescription.textContent = cause;
   //hide the choice buttons
-  choiceButtonOne.style.display = 'none';
+  //choiceButtonOne.style.display = 'none';
   choiceButtonTwo.style.display = 'none';
   choiceButtonThree.style.display = 'none';
   //change the start button text
-  startButton.textContent = 'Try again!';
+  choiceButtonOne.textContent = 'Try again!';
   //show it again and allow the player to click it to start from the beginning
-  gameContainer.appendChild(startButton);
-  startButton.addEventListener('click', startGame);
+  //gameContainer.appendChild(startButton);
+  choiceButtonOne.addEventListener('click', startGame);
 }
 
 //define all possible deaths to be used in event listeners
@@ -34,12 +39,19 @@ const slapFace = () => death('Bad call. The angry bear slaps your face off.');
 const bearWait = () => death('You choose not to open the door and just sit down and wait for something to happen. Nothing ever happens and you die of dehydration.');
 const lockedDoor = () => death('The door is now locked. The boulder turns you into a pancake.');
 const bearBite = () => death('You may have won against the bear the first time, but the bear is not scared of you anymore. The bear takes a bite out of your neck.');
+const alcove = () => death('You run inside the alcove and activate a pressure plate. An arrow shoots from the other wall of the tunnel into your head.');
+const jumpOver = () => death('You jumped the pit but by now the boulder has gotten too close and, not being able to outrun it any longer, you get turned into a pancake.');
 
 //starts the game up at the first room
 const startGame = function(event) {
   //remove event listener from the start button and get rid of it
-  startButton.removeEventListener('click', startGame);
-  gameContainer.removeChild(startButton);
+  choiceButtonOne.removeEventListener('click', startGame);
+  //gameContainer.removeChild(startButton);
+
+  //remove event listeners from tunnelThree if the user chooses to play agains
+  //choiceButtonOne.removeEventListener('click', startGame);
+  choiceButtonTwo.removeEventListener('click', trueEnding);
+
   //set room description
   roomDescription.textContent = 'You awake in a dimly lit room. There are doors to your left and right. Which door do you pick?';
   //show appropriate choice buttons
@@ -121,16 +133,14 @@ const outside = function() {
   //tell the user they have won, kind of
   roomDescription.textContent = 'You exit through the door and are greeted with a beautiful view. ...The end(?)'
 
-  //hide choice buttons
-  choiceButtonOne.style.display = 'none';
+  //hide choice button two
   choiceButtonTwo.style.display = 'none';
 
   //set start button text to start over and show it
-  startButton.textContent = 'Start Over';
-  gameContainer.appendChild(startButton);
+  choiceButtonOne.textContent = 'Start Over';
 
   //add event listener to start the game over
-  startButton.addEventListener('click', startGame);
+  choiceButtonOne.addEventListener('click', startGame);
 }
 
 //function for the boulder
@@ -140,7 +150,7 @@ const boulder = function() {
   choiceButtonTwo.removeEventListener('click', outside);
 
   //set the scene
-  roomDescription.textContent = 'All the sudden you hear the Iniana Jones theme playing faintly. "What in the world is going on?" you ask yourself. All of the sudden the room starts shaking and the wall in front of you lifts up. You see a huge boulder coming towards you. What do you do?';
+  roomDescription.textContent = 'All the sudden you hear the Indiana Jones theme playing faintly. "What in the world is going on?" you ask yourself. All of the sudden the room starts shaking and the wall in front of you lifts up. You see a huge boulder coming towards you. What do you do? You have 10 seconds before it flattens you.';
 
   //show third choice button, we use it this round
   choiceButtonThree.style.display = 'block';
@@ -150,6 +160,11 @@ const boulder = function() {
   choiceButtonTwo.textContent = 'Go back to the bear';
   choiceButtonThree.textContent = 'Run down The tunnel';
 
+  //add a timer to give the player a certain amount of time to chooses
+  boulderTimer = setTimeout(() => {
+    death("You waited too long to choose and the boulder flattened you");
+  }, 10000);
+
   //add event listeners for buttons
   choiceButtonOne.addEventListener('click', lockedDoor);
   choiceButtonTwo.addEventListener('click', bearBite);
@@ -158,28 +173,123 @@ const boulder = function() {
 
 //function for the first part of the tunnel scene
 const tunnelOne = function() {
-  
+  //clear timer from previous section
+  clearTimeout(boulderTimer);
+
+  //remove event listeners
+  choiceButtonOne.removeEventListener('click', lockedDoor);
+  choiceButtonTwo.removeEventListener('click', bearBite);
+  choiceButtonThree.removeEventListener('click', tunnelOne);
+
+  //set the scene
+  roomDescription.textContent = 'You frantically run down the tunnel away from the boulder. Up ahead you see an alcove that would allow you to get out of the way. What do you do? Act fast!';
+
+  //hide the third button, we don't need it
+  choiceButtonThree.style.display = 'none';
+
+  //set the text content for the buttons
+  choiceButtonOne.textContent = 'Hide in the alcove';
+  choiceButtonTwo.textContent = 'Keep running';
+
+  //set timeout to keep the player moving
+  boulderTimer = setTimeout(() => {
+    death("You waited too long to choose and the boulder flattened you");
+  }, 10000);
+
+  //add event listeners for the buttons
+  choiceButtonOne.addEventListener('click', alcove);
+  choiceButtonTwo.addEventListener('click', tunnelTwo);
+
+  //set timeout for later, to give the player a time limit
+}
+
+//function for the second part of the tunnel scene
+const tunnelTwo = function() {
+  //cancel timeout from the previous section
+  clearTimeout(boulderTimer);
+
+  //remove event listeners
+  choiceButtonOne.removeEventListener('click', alcove);
+  choiceButtonTwo.removeEventListener('click', tunnelTwo);
+
+  //set the scene
+  roomDescription.textContent = "You keep running, feeling like the alcove could have been a trap. You're still well ahead of the boulder. You can see the light at the end of the tunnel. You see a pit coming up. You're pretty sure the alcove was a trap and this might be as well. But if it's not the boulder is too big and will roll right over it. Make your choice quick!";
+
+  //set the text content for the buttons
+  choiceButtonOne.textContent = 'Jump over the pit';
+  choiceButtonTwo.textContent = 'Go in the pit';
+
+  //add timeout to give the player a time limit
+  boulderTimer = setTimeout(() => {
+    death("You waited too long to choose and the boulder flattened you");
+  }, 10000);
+
+  //add event listeners for the buttons
+  choiceButtonOne.addEventListener('click', jumpOver);
+  choiceButtonTwo.addEventListener('click', tunnelThree);
+}
+
+//function for the third part of the tunnel scene
+const tunnelThree = function() {
+  //remove timeout from previous section
+  clearTimeout(boulderTimer);
+
+  //remove event listeners
+  choiceButtonOne.removeEventListener('click', jumpOver);
+  choiceButtonTwo.removeEventListener('click', tunnelThree);
+
+  //add 1 to playCount
+  playCount += 1;
+
+  //set the scene
+  roomDescription.textContent = "You jump into the pit and to your surprise, you don't die. The boulder passes over top and you are finally safe. You make your way to the exit and breathe out a sigh of relief. You hear a voice ask you if you would like to play again.";
+
+  //set text content for button
+  choiceButtonOne.textContent = 'Yes';
+  choiceButtonTwo.textContent = 'No';
+
+  //add event listeners for buttons
+  choiceButtonOne.addEventListener('click', startGame);
+  choiceButtonTwo.addEventListener('click', trueEnding);
+}
+
+//function for the ending of the game
+const trueEnding = function() {
+  //remove event listeners
+  choiceButtonOne.removeEventListener('click', startGame);
+  choiceButtonTwo.removeEventListener('click', trueEnding);
+
+  //end of game message
+  roomDescription.textContent = '"Aw why not?" says your friend. "' + playCount + `${playCount > 1 ? " times" : " time"}` + ' is enough." you say. Its a warm summer day in 2007. You head inside your house to get a drink of water and eat a snack. Just another fun day of playing Indiana Jones with your friends.';
+
+  gameContainer.appendChild(theEnd);
+
+  choiceButtonOne.style.display = 'none';
+  choiceButtonTwo.style.display = 'none';
 }
 
 //setup for the game. Title, description, buttons
 document.querySelector('#game').textContent = 'DOM Adventure Game';
 const gameContainer = document.querySelector('#game');
-const startButton = document.createElement('button');
 const roomDescription = document.createElement('p');
 const choiceButtonOne = document.createElement('button');
 const choiceButtonTwo = document.createElement('button');
 const choiceButtonThree = document.createElement('button');
+const theEnd = document.createElement('p');
+theEnd.textContent = "The End";
 choiceButtonOne.className = 'choice-button';
 choiceButtonTwo.className = 'choice-button';
 choiceButtonThree.className = 'choice-button';
-startButton.textContent = "Start";
-startButton.className = 'start';
+choiceButtonOne.textContent = 'Start';
+choiceButtonOne.style.display = 'block';
 roomDescription.textContent = 'Welcome to my adventure game! Once you click start, you will be presented with a description of the room and 2 or 3 choices. Choose wisely and have fun!';
 gameContainer.appendChild(roomDescription);
-gameContainer.appendChild(startButton);
 gameContainer.appendChild(choiceButtonOne);
 gameContainer.appendChild(choiceButtonTwo);
 gameContainer.appendChild(choiceButtonThree);
 
+let playCount = 0;
+let boulderTimer;
+
 //start the game
-startButton.addEventListener('click', startGame);
+choiceButtonOne.addEventListener('click', startGame);
