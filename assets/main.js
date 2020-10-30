@@ -5,8 +5,7 @@
 //this function handles the player dying and gives the option to try again
 const death = function(cause) {
   //remove any event listeners or timeouts so you don't die a second time
-  choiceButtonOne.removeEventListener('click', pitfall);
-  choiceButtonTwo.removeEventListener('click', bearRoom);
+  window.removeEventListener('keyup', checkKey);
   choiceButtonOne.removeEventListener('click', bearMoved);
   choiceButtonTwo.removeEventListener('click', slapFace);
   choiceButtonOne.removeEventListener('click', goldRoom);
@@ -19,17 +18,22 @@ const death = function(cause) {
   choiceButtonOne.removeEventListener('click', jumpOver);
   choiceButtonTwo.removeEventListener('click', tunnelThree);
   clearTimeout(boulderTimer);
-  //choiceButtonThree.removeEventListener('click', dead);
+  clearInterval(countdownTimer);
+
+  //remove timer from screen
+  if (gameContainer.contains(timer)) {
+    gameContainer.removeChild(timer);
+  }
   //change the 'room description' to the cause of death provided by the call
   roomDescription.textContent = cause;
+  //show the first button if not shown previously
+  choiceButtonOne.style.display = 'block';
   //hide the choice buttons
-  //choiceButtonOne.style.display = 'none';
   choiceButtonTwo.style.display = 'none';
   choiceButtonThree.style.display = 'none';
   //change the start button text
   choiceButtonOne.textContent = 'Try again!';
   //show it again and allow the player to click it to start from the beginning
-  //gameContainer.appendChild(startButton);
   choiceButtonOne.addEventListener('click', startGame);
 }
 
@@ -53,28 +57,38 @@ const startGame = function(event) {
   choiceButtonTwo.removeEventListener('click', trueEnding);
 
   //set room description
-  roomDescription.textContent = 'You awake in a dimly lit room. There are doors to your left and right. Which door do you pick?';
-  //show appropriate choice buttons
-  choiceButtonOne.style.display = 'block';
-  choiceButtonTwo.style.display = 'block';
-  //and set their text
-  choiceButtonOne.textContent = 'Right';
-  choiceButtonTwo.textContent = 'Left';
+  roomDescription.textContent = 'You awake in a dimly lit room. There are doors to your left and right. Which door do you pick? Press the right or left arrow key.';
+
+  //hide buttons, player uses arrow keys
+  choiceButtonOne.style.display = 'none';
+  choiceButtonTwo.style.display = 'none';
 
   //add event listeners for each button
-  choiceButtonOne.addEventListener('click', pitfall);
+  window.addEventListener('keyup', checkKey);
+}
 
-  choiceButtonTwo.addEventListener('click', bearRoom);
+//function to check which key the user pressed
+const checkKey = function() {
+  if (event.key === "ArrowRight") {
+    pitfall();
+  } else if (event.key === "ArrowLeft") {
+    bearRoom();
+  } else {
+    startGame();
+  }
 }
 
 //function to handle the bear room
 const bearRoom = function() {
   //remove event listeners from previous room
-  choiceButtonOne.removeEventListener('click', pitfall);
-  choiceButtonTwo.removeEventListener('click', bearRoom);
+  window.removeEventListener('keyup', checkKey);
 
   //set the scene
   roomDescription.textContent = "There is a bear in here. It's sitting in front of another door eating from a pot of honey. How are you going to move the bear?";
+
+  //show the buttons
+  choiceButtonOne.style.display = 'block';
+  choiceButtonTwo.style.display = 'block';
 
   //set the text content for each of the buttons
   choiceButtonOne.textContent = 'Taunt Bear';
@@ -163,7 +177,19 @@ const boulder = function() {
   //add a timer to give the player a certain amount of time to chooses
   boulderTimer = setTimeout(() => {
     death("You waited too long to choose and the boulder flattened you");
-  }, 10000);
+  }, 15000);
+
+  //show the user how much time is left so they don't have to guess
+  timeRemaining = 15;
+  timer.textContent = timeRemaining + 's';
+  gameContainer.appendChild(timer);
+  countdownTimer = setInterval(() => {
+    timeRemaining--;
+    timer.textContent = timeRemaining + 's';
+    if (timeRemaining === 0) {
+      clearInterval(countdownTimer);
+    }
+  }, 1000);
 
   //add event listeners for buttons
   choiceButtonOne.addEventListener('click', lockedDoor);
@@ -175,6 +201,7 @@ const boulder = function() {
 const tunnelOne = function() {
   //clear timer from previous section
   clearTimeout(boulderTimer);
+  clearInterval(countdownTimer);
 
   //remove event listeners
   choiceButtonOne.removeEventListener('click', lockedDoor);
@@ -194,7 +221,18 @@ const tunnelOne = function() {
   //set timeout to keep the player moving
   boulderTimer = setTimeout(() => {
     death("You waited too long to choose and the boulder flattened you");
-  }, 10000);
+  }, 15000);
+
+  //show the user how much time is left so they don't have to guess
+  timeRemaining = 15;
+  timer.textContent = timeRemaining + 's';
+  countdownTimer = setInterval(() => {
+    timeRemaining--;
+    timer.textContent = timeRemaining + 's';
+    if (timeRemaining === 0) {
+      clearInterval(countdownTimer);
+    }
+  }, 1000);
 
   //add event listeners for the buttons
   choiceButtonOne.addEventListener('click', alcove);
@@ -205,8 +243,9 @@ const tunnelOne = function() {
 
 //function for the second part of the tunnel scene
 const tunnelTwo = function() {
-  //cancel timeout from the previous section
+  //cancel timeout and interval from the previous section
   clearTimeout(boulderTimer);
+  clearInterval(countdownTimer);
 
   //remove event listeners
   choiceButtonOne.removeEventListener('click', alcove);
@@ -222,7 +261,18 @@ const tunnelTwo = function() {
   //add timeout to give the player a time limit
   boulderTimer = setTimeout(() => {
     death("You waited too long to choose and the boulder flattened you");
-  }, 10000);
+  }, 15000);
+
+  //show the user how much time is left so they don't have to guess
+  timeRemaining = 15;
+  timer.textContent = timeRemaining + 's';
+  countdownTimer = setInterval(() => {
+    timeRemaining--;
+    timer.textContent = timeRemaining + 's';
+    if (timeRemaining === 0) {
+      clearInterval(countdownTimer);
+    }
+  }, 1000);
 
   //add event listeners for the buttons
   choiceButtonOne.addEventListener('click', jumpOver);
@@ -233,6 +283,10 @@ const tunnelTwo = function() {
 const tunnelThree = function() {
   //remove timeout from previous section
   clearTimeout(boulderTimer);
+  clearInterval(countdownTimer);
+
+  //remove timer from screen
+  gameContainer.removeChild(timer);
 
   //remove event listeners
   choiceButtonOne.removeEventListener('click', jumpOver);
@@ -288,8 +342,16 @@ gameContainer.appendChild(choiceButtonOne);
 gameContainer.appendChild(choiceButtonTwo);
 gameContainer.appendChild(choiceButtonThree);
 
+//keep track of number of times the player has restarted after the end
 let playCount = 0;
+//define these values in the global scope
 let boulderTimer;
+let countdownTimer;
+let timeRemaining = 0;
+
+//create timer element to show later
+const timer = document.createElement('p');
+timer.className = 'timer';
 
 //start the game
 choiceButtonOne.addEventListener('click', startGame);
