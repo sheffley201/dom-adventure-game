@@ -2,7 +2,7 @@
  * DOM Adventure Game
  */
 
-//Create function that starts the game
+//some general variables for the game
 //create a paragraph
 const mainPara = document.createElement("p");
 //check for if they went through bear Room
@@ -10,6 +10,8 @@ let bearCheck = false;
 //create variable for how long waiting
 let wait = 0;
 
+
+//Create function that starts the game
 const startGame = function() {
   //set variable for main
   const main = document.querySelector("#game");
@@ -31,8 +33,7 @@ const startGame = function() {
   button1.textContent = "Left";
   button2.textContent = "wait";
   button3.textContent = "right";
-  //set event listeners for each button to go for each door
-  //add function for which button is pressed
+  //set event listeners for each button
   button1.addEventListener("click", left = () => {
     return bearRoom();
   });
@@ -40,11 +41,14 @@ const startGame = function() {
     //display first message when waiting
     if (wait === 0) {
       mainPara.textContent = "You decide to wait for some time. Nothing happens. What do you want to do?"
+      //Second message
     } else if (wait > 0 && wait < 15) {
       mainPara.textContent = "You continue to wait. For what reason, you don't know. What do you want to do?"
     } else if (wait === 15) {
+      //if they continue throw them in waiting room
      return waitingRoom();
     }
+    //increase wait by one
     wait++;
   });
   button3.addEventListener("click", right = () => {
@@ -55,6 +59,7 @@ const startGame = function() {
   btnArea.appendChild(button2);
   btnArea.appendChild(button3);
 }
+
 
 //create waitingRoom
 const waitingRoom = function () {
@@ -77,6 +82,7 @@ const waitingRoom = function () {
   button2.textContent = "door";
   //wait option until you die
   button1.addEventListener('click', waitHere = ()=> {
+    //slightly altered code from first wait
     if (wait === 0) {
       mainPara.textContent = "It worked before so why not try it again. You wait for some time and nothing happens. What do you want to do?"
     } else if (wait > 0 && wait <10) {
@@ -97,6 +103,7 @@ const waitingRoom = function () {
   })
 }
 
+
 //pitrap function here
 const pitTrap = function() {
   //change text of main paragraph
@@ -114,14 +121,18 @@ const pitTrap = function() {
   return death("You fail to jump over the gap and fall into a pit.")
 }, 6000);
   //if the user presses spacebar within 10seconds move to new Room
-  //stop timer if spacebar is pressed
-  window.addEventListener("keyup", event => {
+  const jump = function() {
     if (event.key == " ") {
     clearTimeout(trapFall);
+    //delete listener for jump
+    window.removeEventListener("keyup", jump);
     return hallway();
     }
-  });
+  };
+  //stop timer if spacebar is pressed
+  window.addEventListener("keyup", jump);
 }
+
 
 //hallway function
 const hallway = function () {
@@ -137,10 +148,10 @@ const hallway = function () {
       return ghostRoom();
     }
   }
-  //add event listenerfor keydown
+  //add event listener for keydown
   window.addEventListener("keydown", keys);
-
 };
+
 
 //adding a ghost room because reasons
 const ghostRoom = function() {
@@ -198,7 +209,7 @@ const ghostRoom = function() {
       //set ghost to true
       ghost = true;
     //if ghost true, pick up key on ground
-  } else if (ghost ==true) {
+    } else if (ghost ==true) {
       mainPara.textContent = "Mustering your courage you open the closet door again. The ghost appears to be gone. You see a key lying on the ground and decide to pick it up. Now what do you do?";
       //set key to true
       key = true;
@@ -221,6 +232,8 @@ const death = function(string) {
   section.removeChild(button3);
 };
 
+
+//adding bearRoom function
 const bearRoom = function() {
   //add variable for if bear moved
   bearMoved = false;
@@ -234,7 +247,6 @@ const bearRoom = function() {
   const button1 = document.querySelector("button");
   const button2 = document.getElementsByTagName('button')[1];
   const button3 = document.querySelector("button:last-child");
-
   //removing event listeners
   button1.removeEventListener('click', left);
   button2.removeEventListener('click', waitHere);
@@ -253,6 +265,7 @@ const bearRoom = function() {
       return death("The bear has had enough. he charges you and bites your head off.")
     }
   });
+  //if bear moves lets through to gold room, if not, dead
   button2.addEventListener('click', door = ()=>{
     if (bearMoved == false) {
       return death("The bear swats at you as you walk past.")
@@ -260,10 +273,12 @@ const bearRoom = function() {
       return goldRoom();
     }
   });
+  //player dies from trying to steal honey
   button3.addEventListener('click', honey = ()=> {
     return death("That was really stupid. The bear bites your head off.")
   });
 }
+
 
 //add goldRoom function
 const goldRoom = function() {
@@ -326,5 +341,5 @@ const goldRoom = function() {
     section.removeChild(button3);
   });
 }
-
+//Starting the game
 startGame();

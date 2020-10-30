@@ -41,6 +41,7 @@ button:visited {
   border: none;
   padding: 0;
 }
+
 #buttonArea {
   display: flex;
   justify-content: space-between;
