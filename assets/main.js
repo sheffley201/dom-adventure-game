@@ -164,7 +164,7 @@ const boulder = function() {
   choiceButtonTwo.removeEventListener('click', outside);
 
   //set the scene
-  roomDescription.textContent = 'All the sudden you hear the Indiana Jones theme playing faintly. "What in the world is going on?" you ask yourself. All of the sudden the room starts shaking and the wall in front of you lifts up. You see a huge boulder coming towards you. What do you do? You have 10 seconds before it flattens you.';
+  roomDescription.textContent = 'All the sudden you hear the Indiana Jones theme playing faintly. "What in the world is going on?" you ask yourself. All of the sudden the room starts shaking and the wall in front of you lifts up. You see a huge boulder coming towards you. What do you do? You have 15 seconds before it flattens you.';
 
   //show third choice button, we use it this round
   choiceButtonThree.style.display = 'block';
