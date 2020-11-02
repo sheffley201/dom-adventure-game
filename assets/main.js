@@ -73,9 +73,9 @@ const checkKey = function() {
     pitfall();
   } else if (event.key === "ArrowLeft") {
     bearRoom();
-  } else {
+  } /*else {
     startGame();
-  }
+  }*/
 }
 
 //function to handle the bear room
