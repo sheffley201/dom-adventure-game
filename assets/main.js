@@ -1,7 +1,7 @@
 /**
  * DOM Adventure Game
  */
-
+let textTimer;
 //this function handles the player dying and gives the option to try again
 const death = function(cause) {
   //remove any event listeners or timeouts so you don't die a second time
@@ -25,7 +25,8 @@ const death = function(cause) {
     gameContainer.removeChild(timer);
   }
   //change the 'room description' to the cause of death provided by the call
-  roomDescription.textContent = cause;
+  roomDescription.textContent = "";
+  scrollingText(cause)
   //show the first button if not shown previously
   choiceButtonOne.style.display = 'block';
   //hide the choice buttons
@@ -57,7 +58,8 @@ const startGame = function(event) {
   choiceButtonTwo.removeEventListener('click', trueEnding);
 
   //set room description
-  roomDescription.textContent = 'You awake in a dimly lit room. There are doors to your left and right. Which door do you pick? Press the right or left arrow key.';
+  roomDescription.textContent = '';
+  scrollingText('You awake in a dimly lit room. There are doors to your left and right. Which door do you pick? Press the right or left arrow key.')
 
   //hide buttons, player uses arrow keys
   choiceButtonOne.style.display = 'none';
@@ -84,7 +86,8 @@ const bearRoom = function() {
   window.removeEventListener('keyup', checkKey);
 
   //set the scene
-  roomDescription.textContent = "There is a bear in here. It's sitting in front of another door eating from a pot of honey. How are you going to move the bear?";
+  roomDescription.textContent = "";
+  scrollingText("There is a bear in here. It's sitting in front of another door eating from a pot of honey. How are you going to move the bear?")
 
   //show the buttons
   choiceButtonOne.style.display = 'block';
@@ -107,7 +110,8 @@ const bearMoved = function() {
   choiceButtonTwo.removeEventListener('click', slapFace);
 
   //room description
-  roomDescription.textContent = 'The bear moved, you can go through the door now.';
+  roomDescription.textContent = '';
+  scrollingText('The bear moved, you can go through the door now.')
 
   //set text content for each button
   choiceButtonOne.textContent = 'Open door';
@@ -126,7 +130,8 @@ const goldRoom = function() {
   choiceButtonTwo.removeEventListener('click', bearWait);
 
   //set the scene
-  roomDescription.textContent = 'This room has a big bag of gold, a door with an exit sign above, and a tunnel opposite of the gold. Do you take the gold, or leave through the exit?'
+  roomDescription.textContent = ''
+  scrollingText('This room has a big bag of gold, a door with an exit sign above, and a tunnel opposite of the gold. Do you take the gold, or leave through the exit?')
 
   //set text content for buttons
   choiceButtonOne.textContent = 'Take the gold';
@@ -145,7 +150,8 @@ const outside = function() {
   choiceButtonTwo.removeEventListener('click', outside);
 
   //tell the user they have won, kind of
-  roomDescription.textContent = 'You exit through the door and are greeted with a beautiful view. ...The end(?)'
+  roomDescription.textContent = ''
+  scrollingText('You exit through the door and are greeted with a beautiful view. ...The end(?)')
 
   //hide choice button two
   choiceButtonTwo.style.display = 'none';
@@ -164,8 +170,8 @@ const boulder = function() {
   choiceButtonTwo.removeEventListener('click', outside);
 
   //set the scene
-  roomDescription.textContent = 'All the sudden you hear the Indiana Jones theme playing faintly. "What in the world is going on?" you ask yourself. All of the sudden the room starts shaking and the wall in front of you lifts up. You see a huge boulder coming towards you. What do you do? You have 15 seconds before it flattens you.';
-
+  roomDescription.textContent = '';
+  scrollingText('All the sudden you hear the Indiana Jones theme playing faintly. "What in the world is going on?" you ask yourself. All of the sudden the room starts shaking and the wall in front of you lifts up. You see a huge boulder coming towards you. What do you do? You have 15 seconds before it flattens you.')
   //show third choice button, we use it this round
   choiceButtonThree.style.display = 'block';
 
@@ -209,7 +215,8 @@ const tunnelOne = function() {
   choiceButtonThree.removeEventListener('click', tunnelOne);
 
   //set the scene
-  roomDescription.textContent = 'You frantically run down the tunnel away from the boulder. Up ahead you see an alcove that would allow you to get out of the way. What do you do? Act fast!';
+  roomDescription.textContent = '';
+  scrollingText('You frantically run down the tunnel away from the boulder. Up ahead you see an alcove that would allow you to get out of the way. What do you do? Act fast!')
 
   //hide the third button, we don't need it
   choiceButtonThree.style.display = 'none';
@@ -252,7 +259,8 @@ const tunnelTwo = function() {
   choiceButtonTwo.removeEventListener('click', tunnelTwo);
 
   //set the scene
-  roomDescription.textContent = "You keep running, feeling like the alcove could have been a trap. You're still well ahead of the boulder. You can see the light at the end of the tunnel. You see a pit coming up. You're pretty sure the alcove was a trap and this might be as well. But if it's not the boulder is too big and will roll right over it. Make your choice quick!";
+  roomDescription.textContent = "";
+  scrollingText("You keep running, feeling like the alcove could have been a trap. You're still well ahead of the boulder. You can see the light at the end of the tunnel. You see a pit coming up. You're pretty sure the alcove was a trap and this might be as well. But if it's not the boulder is too big and will roll right over it. Make your choice quick!")
 
   //set the text content for the buttons
   choiceButtonOne.textContent = 'Jump over the pit';
@@ -296,7 +304,8 @@ const tunnelThree = function() {
   playCount += 1;
 
   //set the scene
-  roomDescription.textContent = "You jump into the pit and to your surprise, you don't die. The boulder passes over top and you are finally safe. You make your way to the exit and breathe out a sigh of relief. You hear a voice ask you if you would like to play again.";
+  roomDescription.textContent = "";
+  scrollingText("You jump into the pit and to your surprise, you don't die. The boulder passes over top and you are finally safe. You make your way to the exit and breathe out a sigh of relief. You hear a voice ask you if you would like to play again.")
 
   //set text content for button
   choiceButtonOne.textContent = 'Yes';
@@ -314,13 +323,40 @@ const trueEnding = function() {
   choiceButtonTwo.removeEventListener('click', trueEnding);
 
   //end of game message
-  roomDescription.textContent = '"Aw why not?" says your friend. "' + playCount + `${playCount > 1 ? " times" : " time"}` + ' is enough." you say. Its a warm summer day in 2007. You head inside your house to get a drink of water and eat a snack. Just another fun day of playing Indiana Jones with your friends.';
+  roomDescription.textContent = '';
+  scrollingText( '"Aw why not?" says your friend. "' + playCount + `${playCount > 1 ? " times" : " time"}` + ' is enough." you say. Its a warm summer day in 2007. You head inside your house to get a drink of water and eat a snack. Just another fun day of playing Indiana Jones with your friends.')
 
   gameContainer.appendChild(theEnd);
 
   choiceButtonOne.style.display = 'none';
   choiceButtonTwo.style.display = 'none';
 }
+
+function scrollingText(string) {
+  //set timerCount to zero, this will help look through the string
+  let timerCount = 0
+  //if the timer is currently in use
+  if (typeof textTimer !== 'undefined') {
+    //clear timer
+    clearInterval(textTimer)
+  }
+  //start timer
+  textTimer = setInterval(() => {
+    //pull 1 letter from string
+    let currentLetter = string[timerCount]
+    //add that letter to the main text element
+    roomDescription.textContent += currentLetter
+    //move to the next letter
+    timerCount++
+
+    // if we arrive at last letter
+    if (string[timerCount] === undefined) {
+      //stop the timer
+      clearInterval(textTimer)
+    }
+  }, 25)
+}
+
 
 //setup for the game. Title, description, buttons
 document.querySelector('#game').textContent = 'DOM Adventure Game';
@@ -336,7 +372,8 @@ choiceButtonTwo.className = 'choice-button';
 choiceButtonThree.className = 'choice-button';
 choiceButtonOne.textContent = 'Start';
 choiceButtonOne.style.display = 'block';
-roomDescription.textContent = 'Welcome to my adventure game! Once you click start, you will be presented with a description of the room and 2 or 3 choices. Choose wisely and have fun!';
+roomDescription.textContent = '';
+scrollingText('Welcome to my adventure game! Once you click start, you will be presented with a description of the room and 2 or 3 choices. Choose wisely and have fun!')
 gameContainer.appendChild(roomDescription);
 gameContainer.appendChild(choiceButtonOne);
 gameContainer.appendChild(choiceButtonTwo);
