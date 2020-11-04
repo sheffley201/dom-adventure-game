@@ -10,26 +10,38 @@ let bearCheck = false;
 //create variable for how long waiting
 let wait = 0;
 
+let playingAgain = false;
+
+//store section for buttons in a variable
+const btnArea = document.querySelector("#buttonArea");
+
+//set variable for main
+const main = document.querySelector("#game");
+
+//create a variable for a div
+const content = document.createElement("div");
 
 //Create function that starts the game
 const startGame = function() {
-  //set variable for main
-  const main = document.querySelector("#game");
-  //create a variable for a div
-  const content = document.createElement("div");
+  if (playingAgain) {
+    resetButton = btnArea.querySelector('button');
+    btnArea.removeChild(resetButton);
+    oldTextSection = document.querySelector('div');
+    main.removeChild(oldTextSection);
+  }
   //add text to main paragraph
   mainPara.textContent = "You awake in a dimly lit room. There are doors to your left and right. Which do you want to do?";
   //append content into the main
   main.appendChild(content);
   //append the paragraph into the div(content)
   content.appendChild(mainPara);
-  //store section for buttons in a variable
-  const btnArea = document.querySelector("#buttonArea");
+
   //create button elements
   const button1 = document.createElement("button");
   const button2 = document.createElement("button");
   const button3 = document.createElement('button');
   //add text to buttons
+
   button1.textContent = "Left";
   button2.textContent = "wait";
   button3.textContent = "right";
@@ -68,7 +80,6 @@ const waitingRoom = function () {
   //reset wait to zero
   wait = 0;
   //removeEventListener
-  const section = document.querySelector('#buttonArea');
   const button1 = document.querySelector('button');
   const button2 = document.getElementsByTagName('button')[1];
   const button3 = document.querySelector('button:last-child');
@@ -76,7 +87,7 @@ const waitingRoom = function () {
   button2.removeEventListener('click', waitHere);
   button3.removeEventListener('click', right);
   //delete button3
-  section.removeChild(button3);
+  btnArea.removeChild(button3);
   //change button text
   button1.textContent = "wait";
   button2.textContent = "door";
@@ -97,9 +108,9 @@ const waitingRoom = function () {
   button2.addEventListener('click', door = ()=> {
     mainPara.textContent = "You open the door and find it leads to the outside. You wonder what that was all about and leave."
     //delete buttons
-    section.removeChild(button1);
-    section.removeChild(button2);
-    section.removeChild(button3);
+    btnArea.removeChild(button1);
+    btnArea.removeChild(button2);
+    btnArea.removeChild(button3);
   })
 }
 
@@ -109,13 +120,12 @@ const pitTrap = function() {
   //change text of main paragraph
   mainPara.textContent = "You take a step into the room and find yourself sliding down a ramp. Quick, press spacebar to jump!";
   //remove buttons
-  const section = document.querySelector('#buttonArea');
   const button1 = document.querySelector('button');
   const button2 = document.getElementsByTagName('button')[1];
   const button3 = document.querySelector('button:last-child');
-  section.removeChild(button1);
-  section.removeChild(button2);
-  section.removeChild(button3);
+  btnArea.removeChild(button1);
+  btnArea.removeChild(button2);
+  btnArea.removeChild(button3);
   //set a timer to return death after 6seconds
   let trapFall = setTimeout(() => {
   return death("You fail to jump over the gap and fall into a pit.")
@@ -164,14 +174,13 @@ const ghostRoom = function() {
   //change the mainPara text
   mainPara.textContent = "You walk down the right hallway to find yourself in another room. You see 2 doors, one appears to be a closet door. There is also a table in the center of the room. The room is quite cold for some reason. What do you do?"
   //add 3 buttons
-  const section = document.querySelector('#buttonArea');
   const button1 = document.createElement("button");
   const button2 = document.createElement("button");
   const button3 = document.createElement('button');
   //appendchild buttons
-  section.appendChild(button1);
-  section.appendChild(button2);
-  section.appendChild(button3);
+  btnArea.appendChild(button1);
+  btnArea.appendChild(button2);
+  btnArea.appendChild(button3);
   //name buttons
   button1.textContent = "door";
   button2.textContent = "table";
@@ -223,13 +232,25 @@ const death = function(string) {
   //change text of paragraph
   mainPara.textContent = string + " You are dead. Play again?";
   //remove buttons
-  const section = document.querySelector('#buttonArea');
   const button1 = document.querySelector('button');
   const button2 = document.getElementsByTagName('button')[1];
   const button3 = document.querySelector('button:last-child');
-  section.removeChild(button1);
-  section.removeChild(button2);
-  section.removeChild(button3);
+  if (btnArea.contains(button1)){
+    btnArea.removeChild(button1);
+  }
+  if (btnArea.contains(button2)){
+    btnArea.removeChild(button2);
+  }
+  if (btnArea.contains(button3)){
+    btnArea.removeChild(button3);
+  }
+
+  const resetButton = document.createElement('button');
+  resetButton.textContent = "Play Again";
+  btnArea.appendChild(resetButton);
+  playingAgain = true;
+
+  resetButton.addEventListener('click', startGame);
 };
 
 
@@ -242,7 +263,6 @@ const bearRoom = function() {
   //change text of main paragraph
   mainPara.textContent = "There is a bear in here. It's sitting in front of another door eating from a pot of honey. How are you going to move the bear?";
   //store section in a variable
-  const buttonSection = document.querySelector("#buttonArea");
   //store all buttons in variables
   const button1 = document.querySelector("button");
   const button2 = document.getElementsByTagName('button')[1];
@@ -335,10 +355,10 @@ const goldRoom = function() {
       mainPara.textContent = "You open the door and find the outdoors to greet you. You've survived, and with quite a bit of gold as reward."
     };
     //delete buttons
-    const section = document.querySelector('section');
-    section.removeChild(button1);
-    section.removeChild(button2);
-    section.removeChild(button3);
+
+    btnArea.removeChild(button1);
+    btnArea.removeChild(button2);
+    btnArea.removeChild(button3);
   });
 }
 //Starting the game
