@@ -10,6 +10,7 @@ let bearCheck = false;
 //create variable for how long waiting
 let wait = 0;
 
+//playingAgain is false, so we don't run a certain block of code in startGame the first time
 let playingAgain = false;
 
 //store section for buttons in a variable
@@ -23,6 +24,7 @@ const content = document.createElement("div");
 
 //Create function that starts the game
 const startGame = function() {
+  //startGame adds new elements, so we need to get rid of the old ones
   if (playingAgain) {
     resetButton = btnArea.querySelector('button');
     btnArea.removeChild(resetButton);
@@ -108,9 +110,19 @@ const waitingRoom = function () {
   button2.addEventListener('click', door = ()=> {
     mainPara.textContent = "You open the door and find it leads to the outside. You wonder what that was all about and leave."
     //delete buttons
+
     btnArea.removeChild(button1);
     btnArea.removeChild(button2);
-    btnArea.removeChild(button3);
+
+    //create a reset button
+    const resetButton = document.createElement('button');
+    resetButton.textContent = "Play Again";
+    btnArea.appendChild(resetButton);
+    //set playingAgain to true
+    playingAgain = true;
+
+    //add event listener to start the game again
+    resetButton.addEventListener('click', startGame);
   })
 }
 
@@ -245,11 +257,14 @@ const death = function(string) {
     btnArea.removeChild(button3);
   }
 
+  //create a reset button
   const resetButton = document.createElement('button');
   resetButton.textContent = "Play Again";
   btnArea.appendChild(resetButton);
+  //set playingAgain to true
   playingAgain = true;
 
+  //add event listener to start the game again
   resetButton.addEventListener('click', startGame);
 };
 
