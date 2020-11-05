@@ -95,28 +95,25 @@ const bearRoom = function() {
   choiceButtonTwo.textContent = 'Take Honey';
 
   //add event listeners for each of the buttons
-  choiceButtonOne.addEventListener('click', bearMoved);
+  choiceButtonOne.addEventListener('click', bearMoved = () => {
+    //remove previous event listeners
+    choiceButtonOne.removeEventListener('click', bearMoved);
+    choiceButtonTwo.removeEventListener('click', slapFace);
+
+    //room description
+    roomDescription.textContent = 'The bear moved, you can go through the door now.';
+
+    //set text content for each button
+    choiceButtonOne.textContent = 'Open door';
+    choiceButtonTwo.textContent = 'Sit and wait';
+
+    //add event listeners for each button
+    choiceButtonOne.addEventListener('click', goldRoom);
+
+    choiceButtonTwo.addEventListener('click', bearWait);
+  });
 
   choiceButtonTwo.addEventListener('click', slapFace);
-}
-
-//function to handle the bear moving
-const bearMoved = function() {
-  //remove previous event listeners
-  choiceButtonOne.removeEventListener('click', bearMoved);
-  choiceButtonTwo.removeEventListener('click', slapFace);
-
-  //room description
-  roomDescription.textContent = 'The bear moved, you can go through the door now.';
-
-  //set text content for each button
-  choiceButtonOne.textContent = 'Open door';
-  choiceButtonTwo.textContent = 'Sit and wait';
-
-  //add event listeners for each button
-  choiceButtonOne.addEventListener('click', goldRoom);
-
-  choiceButtonTwo.addEventListener('click', bearWait);
 }
 
 //function for the gold room
