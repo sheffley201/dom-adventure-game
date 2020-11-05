@@ -360,6 +360,7 @@ function scrollingText(string) {
 
 //setup for the game. Title, description, buttons
 document.querySelector('#game').textContent = 'DOM Adventure Game';
+//set HTML elements into javascript variables
 const gameContainer = document.querySelector('#game');
 const roomDescription = document.createElement('p');
 const choiceButtonOne = document.createElement('button');
@@ -367,13 +368,16 @@ const choiceButtonTwo = document.createElement('button');
 const choiceButtonThree = document.createElement('button');
 const theEnd = document.createElement('p');
 theEnd.textContent = "The End";
+//add some class names to the buttons
 choiceButtonOne.className = 'choice-button';
 choiceButtonTwo.className = 'choice-button';
 choiceButtonThree.className = 'choice-button';
 choiceButtonOne.textContent = 'Start';
 choiceButtonOne.style.display = 'block';
+//add the first inital text
 roomDescription.textContent = '';
 scrollingText('Welcome to my adventure game! Once you click start, you will be presented with a description of the room and 2 or 3 choices. Choose wisely and have fun!')
+//add HTML elements to the DOM
 gameContainer.appendChild(roomDescription);
 gameContainer.appendChild(choiceButtonOne);
 gameContainer.appendChild(choiceButtonTwo);
