@@ -9,6 +9,7 @@ let button2 = document.querySelector('.button2')
 let button3 = document.querySelector('.button3')
 let button4 = document.querySelector('.button4')
 let buttons = document.querySelectorAll('button')
+let resetButton = document.querySelector('.resetButton')
 let timer;
 
 const player = {
@@ -16,10 +17,16 @@ const player = {
 }
 
 function gameStart() {
+  //hide reset button
+  resetButton.style.display = 'none';
   //set the starter game Text
+  gameText.textContent = '';
   scrollingText("You are a monster hunter getting chased in a forest by a band of monsters. You can meet up with your partner, or take the monsters on solo.")
 
   // add text to buttons and eventListeners to each button
+  button1.style.display = 'inline'
+  button2.style.display = 'inline'
+
   button1.textContent = 'Meet up with partner'
   button1.addEventListener('click', meetPartner)
 
@@ -42,7 +49,7 @@ function confidentType() {
 
   //button 1 leads to death
   button1.textContent = 'Just your dagger'
-  button1.addEventListener('click', event => {
+  button1.addEventListener('click', smallDagger = () => {
     gameOver('You try to fight them, but a small dagger was not enough to defend yourself and you die a valiant death')
   })
 
@@ -53,15 +60,16 @@ function confidentType() {
   //button 3 also leads to death
   button3.textContent = 'Why not both?'
   button3.style.display = 'block'
-  button3.addEventListener('click', event => {
+  button3.addEventListener('click', wieldBoth = () => {
     gameOver('You dont know how to wield both efficiently, you got overconfient and died.')
   })
 }
 
 function survivedMonsters() {
   //remove past listeners
-  button1.removeEventListener('click', gameOver)
+  button1.removeEventListener('click', smallDagger)
   button2.removeEventListener('click', survivedMonsters)
+  button3.removeEventListener('click', wieldBoth)
 
   //change the game text
   gameText.textContent = ''
@@ -76,6 +84,11 @@ function survivedMonsters() {
   button2.style.display = 'none'
   button3.style.display = 'none'
   button4.style.display = 'none'
+
+  //end of this path, reset the game
+  resetButton.style.display = 'block';
+
+  resetButton.addEventListener('click', gameStart);
 }
 
 function meetPartner() {
@@ -154,9 +167,18 @@ function insideBuilding() {
 
   button1.style.display = 'none'
   button2.style.display = 'none'
+
+  //there is nothing after this, so we reset the game
+  resetButton.style.display = 'block';
+
+  resetButton.addEventListener('click', gameStart);
 }
 
 function gameOver(text) {
+  //remove past listeners
+  button1.removeEventListener('click', smallDagger)
+  button2.removeEventListener('click', survivedMonsters)
+  button3.removeEventListener('click', wieldBoth)
   //change main text element
   gameText.textContent = ''
   scrollingText(text + '. To start over refresh the page')
@@ -165,6 +187,13 @@ function gameOver(text) {
   for (let button of buttons) {
     button.style.display = 'none'
   }
+
+  //the game is over, reset the game
+  resetButton.style.display = 'block';
+
+  resetButton.addEventListener('click', gameStart);
+
+
 }
 
 //a fun function that displays the text like an adventure game
