@@ -73,7 +73,7 @@ function survivedMonsters() {
 
   //change the game text
   gameText.textContent = ''
-  scrollingText('You survived the monsters but you are severely hurt, you meet up with your partner and decide what to do next. This is end of this path, please refresh')
+  scrollingText('You survived the monsters but you are severely hurt, you meet up with your partner and decide what to do next. This is end of this path, please click start over to play again')
 
   //change button text
   button1.textContent = 'Hide in a nearby building'
@@ -181,7 +181,7 @@ function gameOver(text) {
   button3.removeEventListener('click', wieldBoth)
   //change main text element
   gameText.textContent = ''
-  scrollingText(text + '. To start over refresh the page')
+  scrollingText(text + '. To start over, click start over')
 
   //set each buttons display to none
   for (let button of buttons) {
